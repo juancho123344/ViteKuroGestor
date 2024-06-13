@@ -79,6 +79,21 @@ const Calendario = () => {
     }
   };
 
+  const handleCreateMeeting = (slotInfo) => {
+    const start = slotInfo.start;
+    const end = slotInfo.end;
+
+    setNewMeeting({
+      id: null,
+      title: '',
+      descripcion: '',
+      start: start,
+      end: end
+    });
+    setIsEdit(false);
+    setModalIsOpen(true);
+  };
+
   const handleCreateOrEdit = async (e) => {
     e.preventDefault();
     try {
@@ -245,7 +260,6 @@ const Calendario = () => {
     if (selectedDate && selectedDate !== '0') {
       const newDate = new Date(selectedDate);
       newDate.setDate(newDate.getDate() + 1);
-      set
       setUpdatedDate(newDate);
     }
   };
@@ -275,6 +289,7 @@ const Calendario = () => {
         views={['month', 'week', 'day']}
         step={15}
         selectable
+        onSelectSlot={handleCreateMeeting}
         onSelectEvent={handleSelectEvent}
         components={{
           event: EventComponent
@@ -282,7 +297,6 @@ const Calendario = () => {
         date={updatedDate}
         onNavigate={handleNavigate}
       />
-
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -297,73 +311,68 @@ const Calendario = () => {
             position: 'absolute',
             top: '50%',
             left: '50%',
+            right: 'auto',
+            bottom: 'auto',
             transform: 'translate(-50%, -50%)',
-            padding: '20px',
-            border: '1px solid #ccc',
+            backgroundColor: '#333',
+            color: '#d4af37',
             borderRadius: '10px',
-            boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
-            backgroundColor: '#fff'
+            padding: '20px',
+            zIndex: 1001
           }
         }}
       >
-        <h2>{isEdit ? 'Editar Reunión' : 'Crear Nueva Reunión'}</h2>
-        <form onSubmit={handleCreateOrEdit}>
-          <label>
-            Título:
-            <input type="text" value={newMeeting.title} onChange={(e) => setNewMeeting({ ...newMeeting, title: e.target.value })} />
-          </label>
-          <br />
-          <label>
-            Descripción:
-            <textarea value={newMeeting.descripcion} onChange={(e) => setNewMeeting({ ...newMeeting, descripcion: e.target.value })} />
-          </label>
-          <br />
-          <label>
-            Fecha de inicio:
-            <input type="datetime-local" value={moment(newMeeting.start).format('YYYY-MM-DDTHH:mm')} onChange={(e) => setNewMeeting({ ...newMeeting, start: new Date(e.target.value) })} />
-          </label>
-          <br />
-          <label>
-            Fecha de fin:
-            <input type="datetime-local" value={moment(newMeeting.end).format('YYYY-MM-DDTHH:mm')} onChange={(e) => setNewMeeting({ ...newMeeting, end: new Date(e.target.value) })} />
-          </label>
-          <br />
-          <button type="submit">{isEdit ? 'Guardar Cambios' : 'Crear Reunión'}</button>
-          {isEdit && (
-            <button type="button" onClick={handleDelete} style={{ marginLeft: '10px', backgroundColor: '#d9534f', border: 'none', borderRadius: '3px', color: '#fff', cursor: 'pointer', padding: '3px 8px' }}>Eliminar</button>
-          )}
-          <button type="button" onClick={closeModal} style={{ marginLeft: '10px' }}>Cancelar</button>
+        <h2 style={{ color: '#d4af37', textAlign: 'center', marginBottom: '20px' }}>{isEdit ? 'Editar Reunión' : 'Crear Reunión'}</h2>
+        <form onSubmit={handleCreateOrEdit} style={{ display: 'flex', flexDirection: 'column' }}>
+          <label htmlFor="title" style={{ color: '#d4af37', marginBottom: '10px' }}>Título:</label>
+          <input
+            type="text"
+            id="title"
+            value={newMeeting.title}
+            onChange={(e) => setNewMeeting({ ...newMeeting, title: e.target.value })}
+            required
+            style={{ marginBottom: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #d4af37', backgroundColor: '#444' }}
+          />
+          <label htmlFor="descripcion" style={{ color: '#d4af37', marginBottom: '10px' }}>Descripción:</label>
+          <textarea
+            id="descripcion"
+            value={newMeeting.descripcion}
+            onChange={(e) => setNewMeeting({ ...newMeeting, descripcion: e.target.value })}
+            required
+            style={{ marginBottom: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #d4af37', backgroundColor: '#444' }}
+          />
+          <label htmlFor="start" style={{ color: '#d4af37', marginBottom: '10px' }}>Inicio:</label>
+          <input
+            type="datetime-local"
+            id="start"
+            value={newMeeting.start ? moment(newMeeting.start).format('YYYY-MM-DDTHH:mm') : ''}
+            onChange={(e) => setNewMeeting({ ...newMeeting, start: e.target.value })}
+            required
+            style={{ marginBottom: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #d4af37', backgroundColor: '#444' }}
+          />
+          <label htmlFor="end" style={{ color: '#d4af37', marginBottom: '10px' }}>Fin:</label>
+          <input
+            type="datetime-local"
+            id="end"
+            value={newMeeting.end ? moment(newMeeting.end).format('YYYY-MM-DDTHH:mm') : ''}
+            onChange={(e) => setNewMeeting({ ...newMeeting, end: e.target.value })}
+            required
+            style={{ marginBottom: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #d4af37', backgroundColor: '#444' }}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <button type="submit" style={{ padding: '5px', borderRadius: '5px', border: 'none', backgroundColor: '#d4af37', color: '#333', cursor: 'pointer' }}>{isEdit ? 'Guardar Cambios' : 'Crear'}</button>
+            <button type="button" onClick={closeModal} style={{ padding: '5px', borderRadius: '5px', border: 'none', backgroundColor: '#d4af37', color: '#333', cursor: 'pointer' }}>Cancelar</button>
+            {isEdit && <button type="button" onClick={handleDelete} style={{ padding: '5px', borderRadius: '5px', border: 'none', backgroundColor: '#d4af37', color: '#333', cursor: 'pointer' }}>Eliminar</button>}
+          </div>
         </form>
       </Modal>
-
-      <Modal
-        isOpen={isConfirmationOpen}
-        onRequestClose={handleCancelDelete}
-        contentLabel="Confirmación de eliminación"
-        ariaHideApp={false}
-        style={{
-          overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            zIndex: 1000
-          },
-          content: {
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            padding: '20px',
-            border: '1px solid #ccc',
-            borderRadius: '10px',
-            boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
-            backgroundColor: '#fff'
-          }
-        }}
-      >
-        <h2>Confirmación de eliminación</h2>
-        <p>{confirmationMessage}</p>
-        <button type="button" onClick={handleConfirmDelete}>Sí, eliminar</button>
-        <button type="button" onClick={handleCancelDelete}>Cancelar</button>
-      </Modal>
+      {isConfirmationOpen && (
+        <ConfirmationCard
+          message={confirmationMessage}
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
     </div>
   );
 };
