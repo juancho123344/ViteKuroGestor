@@ -1,0 +1,55 @@
+.container-actualizar-tarea {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffd700;
+    color: #000;
+  }
+  
+  .heading-actualizar-tarea {
+    color: #000; 
+    margin-bottom: 15px;
+  }
+  
+  .input-actualizar-tarea,
+  .textarea-actualizar-tarea,
+  .select-actualizar-tarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    background-color: #fff;
+    color: #000;
+  }
+  
+  .input-actualizar-tarea:focus,
+  .textarea-actualizar-tarea:focus,
+  .select-actualizar-tarea:focus {
+    outline: none;
+    border-color: #333;
+  }
+  
+  .button-actualizar-tarea {
+    width: 100%;
+    padding: 8px 16px;
+    background-color: #000;
+    color: #ffd700;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .button-actualizar-tarea:hover {
+    background-color: #333;
+  }
+  
+  .error-actualizar-tarea {
+    margin-top: 10px;
+    color: #dc3545;
+    text-align: center;
+  }
+  

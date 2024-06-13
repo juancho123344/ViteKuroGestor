@@ -1,0 +1,54 @@
+.container-actualizar-proyecto {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffd700;
+  color: #000;
+}
+
+.heading-actualizar-proyecto {
+  color: #000;
+}
+
+.form-actualizar-proyecto .form-group-actualizar-proyecto {
+  margin-bottom: 10px;
+}
+
+.label-actualizar-proyecto {
+  display: block;
+  font-weight: bold;
+}
+
+.input-actualizar-proyecto,
+.texproyecto-actualizar-proyecto,
+.select-actualizar-proyecto,
+.textarea-actualizar-proyecto {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #000;
+}
+
+.button-actualizar-proyecto {
+  width: 100%;
+  padding: 8px 16px;
+  background-color: #000;
+  color: #ffd700;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-actualizar-proyecto:hover {
+  background-color: #333;
+}
+
+.error-actualizar-proyecto {
+  margin-top: 10px;
+  color: #dc3545;
+  background-color: white;
+  text-align: center;
+}

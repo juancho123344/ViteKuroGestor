@@ -1,0 +1,150 @@
+.rbc-calendar {
+  background-color: #1c1c1c;
+  border: 1px solid #d4af37;
+  color: #d4af37;
+}
+
+.rbc-toolbar {
+  background-color: #333333;
+  border-bottom: 1px solid #d4af37;
+  color: #d4af37;
+}
+
+.rbc-toolbar button {
+  background-color: #444444;
+  border: none;
+  color: #d4af37;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.rbc-toolbar button:hover {
+  background-color: #555555;
+}
+
+.rbc-toolbar button:focus {
+  outline: none;
+  background-color: #666666;
+}
+
+.rbc-month-view {
+  border: 1px solid #d4af37;
+}
+
+.rbc-header {
+  background-color: #333333;
+  border-bottom: 1px solid #d4af37;
+  color: #d4af37;
+}
+
+.rbc-date-cell {
+  border-right: 1px solid #444444;
+  color: #d4af37;
+}
+
+.rbc-date-cell:hover {
+  background-color: #2a2a2a;
+}
+
+.rbc-day-bg {
+  background-color: #1c1c1c;
+}
+
+.rbc-day-bg:hover {
+  background-color: #2a2a2a;
+}
+
+.rbc-today {
+  background-color: #333333;
+  color: #d4af37;
+}
+
+.rbc-event {
+  background-color: #444444;
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  padding: 1px 10px;
+  margin-bottom: 1px;
+  border-radius: 5px;
+}
+
+.rbc-event.meeting {
+  background-color: lightgreen;
+  color: black;
+  border: 1px solid lightgreen;
+}
+
+.rbc-event.task {
+  background-color: lightblue;
+  color: black;
+  border: 1px solid lightblue;
+}
+
+.rbc-event:hover {
+  background-color: #555555;
+}
+
+.rbc-selected {
+  background-color: #666666;
+  color: #d4af37;
+}
+.confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirmation-card {
+  background-color: #333;
+  color: #d4af37;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+}
+
+.confirmation-message {
+  margin-bottom: 10px;
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.confirm-button,
+.cancel-button {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  background-color: #d4af37;
+  color: #333;
+  cursor: pointer;
+}
+
+.cancel-button {
+  margin-left: 10px;
+}
+.date-input {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #d4af37;
+  background-color: #444;
+  color: #d4af37;
+  margin-right: 10px;
+}
+
+.update-button {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  background-color: #d4af37;
+  color: #333;
+  cursor: pointer;
+}

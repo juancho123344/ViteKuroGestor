@@ -1,0 +1,79 @@
+.content-loggin {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: linear-gradient(60deg, rgba(0, 0, 0, 1) 20%, rgba(102, 102, 102, 1) 50%, rgba(0, 0, 0, 1) 90%);
+  }
+  
+  .content-info-loggin {
+    color: gold;
+    padding-top: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .logging-loggin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .logo-loggin {
+    width: 75%;
+    height: 50%;
+    background-image: url('../asset/kuro1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  
+  .info-loggin {
+    width: 75%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 2vw;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .registro-loggin {
+    width: 60%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: gray;
+  }
+  
+  .email-loggin, .password-loggin {
+    width: 75%;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: white;
+    text-align: center;
+    color: black;
+    border: none;
+  }
+  
+  .singUp-loggin, .create-acount-loggin {
+    width: 75%;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: gold;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .singUp-loggin:hover, .create-acount-loggin:hover {
+    background-color: white;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }

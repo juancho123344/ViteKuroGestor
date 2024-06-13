@@ -1,0 +1,57 @@
+.container-tarea {
+  background-color: #0f0f0f;
+  color: gold;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.title-tarea {
+  color: gold;
+  margin-bottom: 20px;
+}
+
+.input-container-tarea {
+  margin-bottom: 10px;
+}
+
+.input-nombre-tarea,
+.input-descripcion-tarea,
+.select-estado-tarea,
+.input-fecha-limite-tarea,
+.input-proyecto-nombre-tarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid gold;
+  border-radius: 5px;
+  background-color: #0f0f0f;
+  color: gold;
+}
+
+.button-crear-tarea {
+  padding: 10px 20px;
+  background-color: gold;
+  color: #0f0f0f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.button-crear-tarea:hover {
+  background-color: #ffd700;
+}
+
+.error-message,
+.success-message {
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.error-message {
+  background-color: #c00;
+}
+
+.success-message {
+  background-color: #0c0;
+}

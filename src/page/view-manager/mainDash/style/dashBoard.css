@@ -1,0 +1,259 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+}
+
+
+.content-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: rgb(15, 15, 15);
+}
+
+.header-dashboard {
+  width: 100%;
+  height: 15vh;
+  display: grid;
+  grid-template-columns: 15% 70% 15%;
+  border: 2px solid gold;
+  margin-top: 2vh;
+  border-radius: 30px;
+  border-top: 0;
+}
+
+.logo1-dashboard {
+  width: 20vw;
+  height: 13vh;
+  grid-column: 1;
+  background-image: url(../../../../asset/kuro1.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.ubicacion-dashboard {
+  width: 100%;
+  height: 100%;
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: gold;
+  font-size: 3vw;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  cursor: pointer;
+}
+
+.config-dashboard {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 2vw;
+}
+
+.config-icon {
+  color: gold;
+  font-size: 4vw;
+}
+
+.config-menu {
+  position: absolute;
+  top: 10vh;
+  right: 0;
+  background-color: black;
+  color: gold;
+  border-radius: 0.5vw;
+  padding: 1vh 2vw;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 9999; 
+  display: flex;
+  flex-direction: column;
+}
+
+.delete-menu-button, .go-out-menu-button, .toggle-theme-button {
+  background-color: transparent;
+  color: gold;
+  border: 1px solid gold;
+  border-radius: 0.5vw;
+  padding: 0.5vh 1vw;
+  margin-top: 1vh;
+  cursor: pointer;
+  transition: background-color 0.5s, color 0.5s, transform 1s;
+}
+
+.delete-menu-button:hover, .go-out-menu-button:hover, .toggle-theme-button:hover {
+  background-color: gold;
+  color: black;
+}
+
+.aside-dashboard {
+  width: 100%;
+  height: 7vh;
+  margin-top: 2vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+  }
+  
+.aside-dashboard.active {
+  display: flex;
+}
+
+  .options-dashboard {
+  width: 80%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.options-dashboard > button {
+  height: 6vh;
+  width: 20vw;
+  margin: 0vh 1vw;
+  color: black;
+  background-color: white;
+  border-radius: 1vw;
+  padding: 1vh 2vw;
+  font-size: 1.5vw;
+  transition: background-color 0.5s, color 0.5s, transform 1s;
+}
+
+.options-dashboard > button:hover {
+  background-color: black;
+  color: gold;
+  transform: scale(1.1);
+}
+
+.main-dashboard {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1vw;
+  overflow-x: hidden;
+  background-color: rgb(15, 15, 15);
+}
+
+.confirm-delete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.confirm-delete-card {
+  background: black;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  color: gold;
+  border: 2px solid gold;
+}
+
+.confirm-delete-card p {
+  margin-bottom: 20px;
+  color: gold;
+}
+
+.confirm-delete-card button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: black;
+}
+
+.confirm-delete-card button:first-child {
+  background-color: gold;
+}
+
+.confirm-delete-card button:last-child {
+  background-color: grey;
+  color: white;
+}
+
+body.light-mode .content-dashboard {
+  background-color: rgb(194, 194, 194);
+}
+
+body.light-mode .header-dashboard {
+  border: 2px solid black;
+}
+
+body.light-mode .ubicacion-dashboard {
+  color: black;
+}
+
+body.light-mode .config-icon {
+  color: black;
+}
+
+body.light-mode .config-menu {
+  background-color: rgb(194, 194, 194);
+  color: black;
+}
+
+body.light-mode .delete-menu-button, 
+body.light-mode .go-out-menu-button, 
+body.light-mode .toggle-theme-button {
+  color: black;
+  border: 1px solid black;
+}
+
+body.light-mode .delete-menu-button:hover, 
+body.light-mode .go-out-menu-button:hover, 
+body.light-mode .toggle-theme-button:hover {
+  background-color: black;
+  color: white;
+}
+
+body.light-mode .options-dashboard > button {
+  color: white;
+  background-color: black;
+}
+
+body.light-mode .options-dashboard > button:hover {
+  background-color: white;
+  color: black;
+}
+
+body.light-mode .main-dashboard {
+  background-color: rgb(194, 194, 194);
+}
+
+body.light-mode .confirm-delete-overlay {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+body.light-mode .confirm-delete-card {
+  background: white;
+  color: black;
+  border: 2px solid black;
+}
+
+body.light-mode .confirm-delete-card p {
+  color: black;
+}
+
+body.light-mode .confirm-delete-card button:first-child {
+  background-color: black;
+  color: white;
+}
+
+body.light-mode .confirm-delete-card button:last-child {
+  background-color: grey;
+  color: black;
+}

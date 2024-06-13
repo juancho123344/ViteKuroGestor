@@ -1,0 +1,28 @@
+.content-callback {
+    min-width: 100vw;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    animation: burning 5s infinite alternate;
+    flex: 1;
+    background-color: white;
+
+}
+    .page-callback {
+    padding: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .boton-callback{
+    min-width: 600px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 50px;
+    color: black;
+    background-color: #c1cad6;
+    border-radius: 20px;
+  }
+
+  

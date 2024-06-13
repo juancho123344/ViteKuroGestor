@@ -1,0 +1,82 @@
+.formulario-asignar-rol {
+  width: calc(100vw - 60px);
+  height: calc(50vh - 60px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.asignar-rol {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  background-color: #1a1a1a;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.email-rol,
+.rol-rol,
+.guardar-rol {
+  width: 100%;
+  height: 6vh;
+  margin-bottom: 2vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1vw;
+  background-color: #333;
+  color: white;
+}
+
+.email-rol,
+.rol-rol {
+  background-color: transparent;
+}
+
+.email-rol input,
+.rol-rol select,
+.guardar-rol button {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 1.5vw;
+  text-align: center;
+  border-radius: inherit;
+  background-color: transparent;
+  color: white;
+}
+
+.email-rol input::placeholder {
+  color: gold;
+}
+
+.rol-rol select {
+  color: gold;
+}
+
+.option-rol{
+  background-color: #1a1a1a;
+}
+
+.guardar-rol {
+  background-color: gold;
+  color: black;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.guardar-rol:hover {
+  background-color: darkgoldenrod;
+  color: white;
+  transform: scale(1.05);
+}
+
+.mensaje {
+  background-color: red;
+  color: white;
+  padding: 2px;
+  border-radius: 3px;
+}
