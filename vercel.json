@@ -1,17 +1,18 @@
 {
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/" }
-    ],
-    "redirects": [
-      { "source": "/old-route", "destination": "/new-route", "permanent": true }
-    ],
-    "headers": [
+    "version": 2,
+    "builds": [
       {
-        "source": "/(.*)",
-        "headers": [
-          { "key": "Cache-Control", "value": "no-cache" }
-        ]
+        "src": "src/main.jsx",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "dist"
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/index.html"
       }
     ]
   }
-  
