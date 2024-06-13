@@ -18,6 +18,7 @@ const Calendario = () => {
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [newMeeting, setNewMeeting] = useState({
+    id: null,
     title: '',
     descripcion: '',
     start: null,
@@ -94,7 +95,6 @@ const Calendario = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        setMessage('Reunión editada exitosamente');
       } else {
         resultado = await axios.post('https://backendkurogestor.onrender.com/api/meeting', {
           nombre: newMeeting.title,
@@ -106,44 +106,45 @@ const Calendario = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        setMessage('Reunión creada exitosamente');
       }
       if (resultado.data.resultado === 'Reunión actualizada exitosamente' || resultado.data.resultado === 'Reunión creada exitosamente') {
         fetchReuniones();
         closeModal();
+        setMessage(resultado.data.resultado);
       } else {
-        setMessage('Error al crear/editar la reunión');
+        setMessage('Error: ' + resultado.data.resultado);
       }
     } catch (error) {
       console.error('Error creating/editing meeting:', error);
       setMessage('Error al crear/editar la reunión');
+      if (error.response) {
+        setMessage('Error: ' + error.response.data.message); // Mostrar mensaje de error específico del backend
+      }
     }
   };
 
   const handleDelete = async () => {
-    if (!selectedMeeting) {
-      console.error('selectedMeeting is null');
+    if (!selectedMeeting || !selectedMeeting.id) {
+      console.error('selectedMeeting is null or has no ID');
       return;
     }
 
     const { id, title } = selectedMeeting;
     const token = Cookies.get('token');
 
-    openConfirmation(`¿Está seguro de eliminar la reunión "${title}"?`, async () => {
-      try {
-        await axios.delete(`https://backendkurogestor.onrender.com/api/meeting/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setMessage('Reunión eliminada exitosamente');
-        fetchReuniones();
-        closeModal();
-      } catch (error) {
-        console.error('Error deleting meeting:', error);
-        setMessage('Error al eliminar la reunión');
-      }
-    });
+    try {
+      await axios.delete(`https://backendkurogestor.onrender.com/api/meeting/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setMessage('Reunión eliminada exitosamente');
+      fetchReuniones();
+      closeModal();
+    } catch (error) {
+      console.error('Error deleting meeting:', error);
+      setMessage('Error al eliminar la reunión');
+    }
   };
 
   const handleSelectEvent = (event) => {
@@ -168,7 +169,7 @@ const Calendario = () => {
 
   const openConfirmation = (message, callback) => {
     setConfirmationMessage(message);
-    setConfirmationCallback(() => callback);
+    setConfirmationCallback(callback);
     setIsConfirmationOpen(true);
     setModalIsOpen(false);
   };
@@ -177,11 +178,13 @@ const Calendario = () => {
     setModalIsOpen(false);
     setSelectedMeeting(null);
     setNewMeeting({
+      id: null,
       title: '',
       descripcion: '',
       start: null,
       end: null
     });
+    setIsEdit(false); // Reset edit mode
   };
 
   const handleCancelDelete = () => {
@@ -242,6 +245,7 @@ const Calendario = () => {
     if (selectedDate && selectedDate !== '0') {
       const newDate = new Date(selectedDate);
       newDate.setDate(newDate.getDate() + 1);
+      set
       setUpdatedDate(newDate);
     }
   };
@@ -267,7 +271,7 @@ const Calendario = () => {
         events={[...tareas, ...reuniones]}
         startAccessor="start"
         endAccessor="end"
-        style={{ minHeight: 390, position: 'elative', zIndex: 999 }}
+        style={{ minHeight: 390, position: 'relative', zIndex: 999 }}
         views={['month', 'week', 'day']}
         step={15}
         selectable
@@ -278,6 +282,7 @@ const Calendario = () => {
         date={updatedDate}
         onNavigate={handleNavigate}
       />
+
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -301,7 +306,7 @@ const Calendario = () => {
           }
         }}
       >
-        <h2>Detalles de la reunión</h2>
+        <h2>{isEdit ? 'Editar Reunión' : 'Crear Nueva Reunión'}</h2>
         <form onSubmit={handleCreateOrEdit}>
           <label>
             Título:
@@ -323,8 +328,11 @@ const Calendario = () => {
             <input type="datetime-local" value={moment(newMeeting.end).format('YYYY-MM-DDTHH:mm')} onChange={(e) => setNewMeeting({ ...newMeeting, end: new Date(e.target.value) })} />
           </label>
           <br />
-          <button type="submit">Guardar</button>
-          <button type="button" onClick={closeModal}>Cancelar</button>
+          <button type="submit">{isEdit ? 'Guardar Cambios' : 'Crear Reunión'}</button>
+          {isEdit && (
+            <button type="button" onClick={handleDelete} style={{ marginLeft: '10px', backgroundColor: '#d9534f', border: 'none', borderRadius: '3px', color: '#fff', cursor: 'pointer', padding: '3px 8px' }}>Eliminar</button>
+          )}
+          <button type="button" onClick={closeModal} style={{ marginLeft: '10px' }}>Cancelar</button>
         </form>
       </Modal>
 
