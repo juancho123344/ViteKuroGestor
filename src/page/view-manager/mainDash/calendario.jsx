@@ -267,7 +267,7 @@ const Calendario = () => {
         events={[...tareas, ...reuniones]}
         startAccessor="start"
         endAccessor="end"
-        style={{ minHeight: 390, position: 'relative', zIndex: 999 }}
+        style={{ minHeight: 390, position: 'elative', zIndex: 999 }}
         views={['month', 'week', 'day']}
         step={15}
         selectable
@@ -278,7 +278,6 @@ const Calendario = () => {
         date={updatedDate}
         onNavigate={handleNavigate}
       />
-
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
