@@ -3,7 +3,7 @@ import './style/calendario.css';
 import React, { useEffect, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import axios from 'axios'; // Importamos Axios directamente
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import Modal from 'react-modal';
 
@@ -147,8 +147,8 @@ const Calendario = () => {
   };
 
   const handleSelectEvent = (event) => {
+    setSelectedMeeting(event);
     if (event.type === 'meeting') {
-      setSelectedMeeting(event);
       handleEdit(event);
     }
   };
@@ -201,15 +201,24 @@ const Calendario = () => {
       backgroundColor: isTask ? '#f0ad4e' : '#5bc0de',
       color: '#fff',
       borderRadius: '5px',
-      padding: '0px',
-      cursor: 'pointer'
+      padding: '5px',
+      cursor: 'pointer',
+      display: 'flex',
+      justifyContent: 'space-between'
     };
 
     const eventTitle = event.title || '';
 
+    const handleEditClick = () => {
+      handleEdit(event);
+    };
+
     return (
-      <div style={eventStyle} onClick={event.type === 'meeting' ? handleDelete : null}>
-        {eventTitle}
+      <div style={eventStyle}>
+        <div>{eventTitle}</div>
+        {event.type === 'meeting' && (
+          <button onClick={handleEditClick} style={{ backgroundColor: '#d4af37', border: 'none', borderRadius: '3px', color: '#333', cursor: 'pointer', padding: '3px 8px' }}>Editar</button>
+        )}
       </div>
     );
   };
@@ -223,9 +232,9 @@ const Calendario = () => {
 
   const isValidDate = (dateString) => {
     const regEx = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateString.match(regEx)) return false; 
+    if (!dateString.match(regEx)) return false;
     const d = new Date(dateString);
-    if (Number.isNaN(d.getTime())) return false; 
+    if (Number.isNaN(d.getTime())) return false;
     return d.toISOString().slice(0, 10) === dateString;
   };
 
@@ -269,6 +278,7 @@ const Calendario = () => {
         date={updatedDate}
         onNavigate={handleNavigate}
       />
+
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -283,59 +293,42 @@ const Calendario = () => {
             position: 'absolute',
             top: '50%',
             left: '50%',
-            right: 'auto',
-            bottom: 'auto',
             transform: 'translate(-50%, -50%)',
-            backgroundColor: '#333',
-            color: '#d4af37',
-            borderRadius: '10px',
             padding: '20px',
-            zIndex: 1001
+            border: '1px solid #ccc',
+            borderRadius: '10px',
+            boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
+            backgroundColor: '#fff'
           }
         }}
       >
-        <h2 style={{ color: '#d4af37', textAlign: 'center', marginBottom: '20px' }}>{isEdit ? 'Editar Reunión' : 'Crear Reunión'}</h2>
-        <form onSubmit={handleCreateOrEdit} style={{ display: 'flex', flexDirection: 'column' }}>
-          <label htmlFor="title" style={{ color: '#d4af37', marginBottom: '10px' }}>Título:</label>
-          <input
-            type="text"
-            id="title"
-            value={newMeeting.title}
-            onChange={(e) => setNewMeeting({ ...newMeeting, title: e.target.value })}
-            required
-            style={{ marginBottom: '10px', padding: '5px', borderRadius: '5px' }}
-          />
-          <label htmlFor="descripcion" style={{ color: '#d4af37', marginBottom: '10px' }}>Descripción:</label>
-          <textarea
-            id="descripcion"
-            value={newMeeting.descripcion}
-            onChange={(e) => setNewMeeting({ ...newMeeting, descripcion: e.target.value })}
-            style={{ marginBottom: '10px', padding: '5px', borderRadius: '5px' }}
-          />
-          <label htmlFor="start" style={{ color: '#d4af37', marginBottom: '10px' }}>Inicio:</label>
-          <input
-            type="datetime-local"
-            id="start"
-            value={moment(newMeeting.start).format('YYYY-MM-DDTHH:mm')}
-            onChange={(e) => setNewMeeting({ ...newMeeting, start: new Date(e.target.value) })}
-            required
-            style={{ marginBottom: '10px', padding: '5px', borderRadius: '5px' }}
-          />
-          <label htmlFor="end" style={{ color: '#d4af37', marginBottom: '10px' }}>Fin:</label>
-          <input
-            type="datetime-local"
-            id="end"
-            value={moment(newMeeting.end).format('YYYY-MM-DDTHH:mm')}
-            onChange={(e) => setNewMeeting({ ...newMeeting, end: new Date(e.target.value) })}
-            required
-            style={{ marginBottom: '10px', padding: '5px', borderRadius: '5px' }}
-          />
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <button type="submit" style={{ padding: '5px', borderRadius: '5px', backgroundColor: '#d4af37', color: '#333', cursor: 'pointer', width: '45%' }}>Guardar</button>
-            <button type="button" onClick={closeModal} style={{ padding: '5px', borderRadius: '5px', backgroundColor: '#d4af37', color: '#333', cursor: 'pointer', width: '45%' }}>Cancelar</button>
-          </div>
+        <h2>Detalles de la reunión</h2>
+        <form onSubmit={handleCreateOrEdit}>
+          <label>
+            Título:
+            <input type="text" value={newMeeting.title} onChange={(e) => setNewMeeting({ ...newMeeting, title: e.target.value })} />
+          </label>
+          <br />
+          <label>
+            Descripción:
+            <textarea value={newMeeting.descripcion} onChange={(e) => setNewMeeting({ ...newMeeting, descripcion: e.target.value })} />
+          </label>
+          <br />
+          <label>
+            Fecha de inicio:
+            <input type="datetime-local" value={moment(newMeeting.start).format('YYYY-MM-DDTHH:mm')} onChange={(e) => setNewMeeting({ ...newMeeting, start: new Date(e.target.value) })} />
+          </label>
+          <br />
+          <label>
+            Fecha de fin:
+            <input type="datetime-local" value={moment(newMeeting.end).format('YYYY-MM-DDTHH:mm')} onChange={(e) => setNewMeeting({ ...newMeeting, end: new Date(e.target.value) })} />
+          </label>
+          <br />
+          <button type="submit">Guardar</button>
+          <button type="button" onClick={closeModal}>Cancelar</button>
         </form>
       </Modal>
+
       <Modal
         isOpen={isConfirmationOpen}
         onRequestClose={handleCancelDelete}
@@ -350,23 +343,19 @@ const Calendario = () => {
             position: 'absolute',
             top: '50%',
             left: '50%',
-            right: 'auto',
-            bottom: 'auto',
             transform: 'translate(-50%, -50%)',
-            backgroundColor: '#333',
-            color: '#d4af37',
-            borderRadius: '10px',
             padding: '20px',
-            zIndex: 1001
+            border: '1px solid #ccc',
+            borderRadius: '10px',
+            boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
+            backgroundColor: '#fff'
           }
         }}
       >
-        <h2 style={{ color: '#d4af37', textAlign: 'center', marginBottom: '20px' }}>Confirmar eliminación</h2>
-        <p style={{ color: '#d4af37', marginBottom: '20px' }}>{confirmationMessage}</p>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <button onClick={handleConfirmDelete} style={{ padding: '5px', borderRadius: '5px', backgroundColor: '#d4af37', color: '#333', cursor: 'pointer', width: '45%' }}>Eliminar</button>
-          <button onClick={handleCancelDelete} style={{ padding: '5px', borderRadius: '5px', backgroundColor: '#d4af37', color: '#333', cursor: 'pointer', width: '45%' }}>Cancelar</button>
-        </div>
+        <h2>Confirmación de eliminación</h2>
+        <p>{confirmationMessage}</p>
+        <button type="button" onClick={handleConfirmDelete}>Sí, eliminar</button>
+        <button type="button" onClick={handleCancelDelete}>Cancelar</button>
       </Modal>
     </div>
   );

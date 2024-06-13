@@ -40,7 +40,7 @@ function Tareas() {
   };
 
   return (
-    <div className='content-tarea'>
+    <div className='.content-tarea '>
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-buttons">
           <button className="toggle-button" onClick={toggleSidebar}>

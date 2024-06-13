@@ -8,7 +8,7 @@ const UpdateTask = () => {
     nombreAntiguo: '',
     nombre: '',
     descripcion: '',
-    estado: '',
+    estado: 'Sin completar',
     fecha_limite: '',
     proyecto_nombre: ''
   });
@@ -18,11 +18,10 @@ const UpdateTask = () => {
     const token = Cookies.get('token');
 
     try {
-      const response = await axios.get(`https://back-kuro-gestor-1.onrender.com/api/task/${tarea.nombreAntiguo}`, {
+      const response = await axios.get(`https://backendkurogestor.onrender.com/api/task/${tarea.nombreAntiguo}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (response.data.length > 0) {
@@ -52,11 +51,10 @@ const UpdateTask = () => {
     const token = Cookies.get('token');
 
     try {
-      const verifyResponse = await axios.get(`https://back-kuro-gestor-1.onrender.com/api/task/${tarea.nombre}`, {
+      const verifyResponse = await axios.get(`https://backendkurogestor.onrender.com/api/task/${tarea.nombre}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (verifyResponse.data.length > 0 && verifyResponse.data[0].nombre !== tarea.nombreAntiguo) {
@@ -65,11 +63,10 @@ const UpdateTask = () => {
       }
 
       // Actualizar la tarea
-      const response = await axios.put('https://back-kuro-gestor-1.onrender.com/api/task', tarea, {
+      const response = await axios.put('https://backendkurogestor.onrender.com/api/task', tarea, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (response.data.resultado === 'Tarea actualizada exitosamente') {
