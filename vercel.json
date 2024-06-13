@@ -1,30 +1,16 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "index.html",
-        "use": "@vercel/static"
-      },
-      {
-        "src": "dist/**/*",
-        "use": "@vercel/static"
-      },
-      {
-        "use": "@swc/core",
-        "input": "src",
-        "output": "dist",
-        "config": {
-          "jsc": {
-            "target": "es2018"
-          }
-        }
-      }
+    "rewrites": [
+      { "source": "/(.*)", "destination": "/" }
     ],
-    "routes": [
-      { "handle": "filesystem" },
+    "redirects": [
+      { "source": "/old-route", "destination": "/new-route", "permanent": true }
+    ],
+    "headers": [
       {
-        "src": "/(.*)",
-        "dest": "/index.html"
+        "source": "/(.*)",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache" }
+        ]
       }
     ]
   }
