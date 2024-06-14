@@ -21,8 +21,8 @@ const Calendario = () => {
     id: null,
     title: '',
     descripcion: '',
-    start: null,
-    end: null
+    start: '',
+    end: ''
   });
   const [isEdit, setIsEdit] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -196,8 +196,8 @@ const Calendario = () => {
       id: null,
       title: '',
       descripcion: '',
-      start: null,
-      end: null
+      start: '',
+      end: ''
     });
     setIsEdit(false); // Reset edit mode
   };
@@ -264,97 +264,120 @@ const Calendario = () => {
     }
   };
 
-  const handleNavigate = (date, view) => {
-    setUpdatedDate(date);
+  const handleSelectSlot = (slotInfo) => {
+    handleCreateMeeting(slotInfo);
   };
 
   return (
-    <div>
-      {message && <p>{message}</p>}
-      <input
-        type="date"
-        onChange={handleDateChange}
-        value={selectedDate.toISOString().split('T')[0]}
-        className="date-input"
-        min="1900-01-01"
-      />
-      <button onClick={handleUpdateCalendar} className="update-button">Clic para ir a la fecha</button>
+    <div className="calendar-container">
+      <div className="calendar-header">
+        <h2>Calendario</h2>
+        <div className="date-input">
+          <label>Fecha:</label>
+          <input
+            type="date"
+            value={selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : ''}
+            onChange={handleDateChange}
+          />
+          <button onClick={handleUpdateCalendar}>Actualizar Calendario</button>
+        </div>
+      </div>
+      <div className="calendar-content">
+        <Calendar
+          localizer={localizer}
+          events={[...tareas, ...reuniones]}
+          startAccessor="start"
+          endAccessor="end"
+          selectable
+          style={{ height: 500, margin: '50px' }}
+          onSelectSlot={handleSelectSlot}
+          onSelectEvent={handleSelectEvent}
+          components={{ event: EventComponent }}
+          defaultView="month"
+          date={updatedDate}
+        />
+      </div>
 
-      <Calendar
-        localizer={localizer}
-        events={[...tareas, ...reuniones]}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 600 }}
-        selectable
-        onSelectSlot={handleCreateMeeting}
-        onSelectEvent={handleSelectEvent}
-        defaultView="month"
-        views={['month', 'week', 'day']}
-        date={updatedDate}
-        onNavigate={handleNavigate}
-        components={{
-          event: EventComponent
-        }}
-      />
+      {modalIsOpen && (
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          contentLabel="Crear/Editar Reunión"
+          className="modal"
+          overlayClassName="modal-overlay"
+        >
+          <h2>{isEdit ? 'Editar Reunión' : 'Crear Reunión'}</h2>
+          <form onSubmit={handleCreateOrEdit}>
+            <label htmlFor="title">Nombre:</label>
+            <input
+              type="text"
+              id="title"
+              value={newMeeting.title}
+              onChange={(e) => setNewMeeting({ ...newMeeting, title: e.target.value })}
+              required
+            />
+            <label htmlFor="descripcion">Descripción:</label>
+            <textarea
+              id="descripcion"
+              value={newMeeting.descripcion}
+              onChange={(e) => setNewMeeting({ ...newMeeting, descripcion: e.target.value })}
+              required
+            ></textarea>
+            <label htmlFor="start">Fecha de Inicio:</label>
+            <input
+              type="datetime-local"
+              id="start"
+              value={moment(newMeeting.start).format('YYYY-MM-DDTHH:mm')}
+              onChange={(e) => setNewMeeting({ ...newMeeting, start: e.target.value })}
+              required
+            />
+            <label htmlFor="end">Fecha de Fin:</label>
+            <input
+              type="datetime-local"
+              id="end"
+              value={moment(newMeeting.end).format('YYYY-MM-DDTHH:mm')}
+              onChange={(e) => setNewMeeting({ ...newMeeting, end: e.target.value })}
+              required
+            />
+            <div className="modal-buttons">
+              <button type="submit">{isEdit ? 'Guardar Cambios' : 'Crear Reunión'}</button>
+              <button type="button" onClick={closeModal}>Cancelar</button>
+              {isEdit && (
+                <button
+                  type="button"
+                  onClick={() => openConfirmation('¿Estás seguro de eliminar esta reunión?', handleDelete)}
+                  className="delete-button"
+                >
+                  Eliminar
+                </button>
+              )}
+            </div>
+          </form>
+        </Modal>
+      )}
 
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel={isEdit ? 'Editar Reunión' : 'Crear Reunión'}
-        ariaHideApp={false}
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <h2>{isEdit ? 'Editar Reunión' : 'Crear Reunión'}</h2>
-        <form onSubmit={handleCreateOrEdit}>
-          <label>Nombre:</label>
-          <input
-            type="text"
-            value={newMeeting.title}
-            onChange={(e) => setNewMeeting({ ...newMeeting, title: e.target.value })}
-            required
-          />
-          <label>Descripción:</label>
-          <input
-            type="text"
-            value={newMeeting.descripcion}
-            onChange={(e) => setNewMeeting({ ...newMeeting, descripcion: e.target.value })}
-            required
-          />
-          <label>Fecha de inicio:</label>
-          <input
-            type="datetime-local"
-            value={newMeeting.start ? moment(newMeeting.start).format('YYYY-MM-DDTHH:mm') : ''}
-            onChange={(e) => setNewMeeting({ ...newMeeting, start: new Date(e.target.value) })}
-            required
-          />
-          <label>Fecha de fin:</label>
-          <input
-            type="datetime-local"
-            value={newMeeting.end ? moment(newMeeting.end).format('YYYY-MM-DDTHH:mm') : ''}
-            onChange={(e) => setNewMeeting({ ...newMeeting, end: new Date(e.target.value) })}
-            required
-          />
-          <button type="submit">{isEdit ? 'Guardar cambios' : 'Crear reunión'}</button>
-          {isEdit && <button type="button" onClick={() => openConfirmation('¿Estás seguro de que deseas eliminar esta reunión?', handleDelete)} className="delete-button">Eliminar reunión</button>}
-          <button type="button" onClick={closeModal}>Cancelar</button>
-        </form>
-      </Modal>
+      {isConfirmationOpen && (
+        <Modal
+          isOpen={isConfirmationOpen}
+          onRequestClose={handleCancelDelete}
+          contentLabel="Confirmación"
+          className="confirmation-modal"
+          overlayClassName="modal-overlay"
+        >
+          <h2>Confirmación</h2>
+          <p>{confirmationMessage}</p>
+          <div className="modal-buttons">
+            <button onClick={handleConfirmDelete}>Sí</button>
+            <button onClick={handleCancelDelete}>No</button>
+          </div>
+        </Modal>
+      )}
 
-      <Modal
-        isOpen={isConfirmationOpen}
-        onRequestClose={() => setIsConfirmationOpen(false)}
-        contentLabel="Confirmar eliminación"
-        ariaHideApp={false}
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <h2>Confirmar eliminación</h2>
-        <p>{confirmationMessage}</p>
-        <button onClick={handleConfirmDelete} className="confirm-delete-button">Eliminar</button>
-        <button onClick={handleCancelDelete}>Cancelar</button>
-      </Modal>
+      {message && (
+        <div className="message">
+          <p>{message}</p>
+        </div>
+      )}
     </div>
   );
 };
