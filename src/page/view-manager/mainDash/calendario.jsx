@@ -94,50 +94,51 @@ const Calendario = () => {
     setModalIsOpen(true);
   };
 
-  const handleCreateOrEdit = async (e) => {
-    e.preventDefault();
-    try {
-      let resultado;
-      const token = Cookies.get('token');
-      if (isEdit) {
-        resultado = await axios.put(`https://backendkurogestor.onrender.com/api/meeting/${newMeeting.id}`, {
-          nombre: newMeeting.title,
-          descripcion: newMeeting.descripcion,
-          fecha_inicio: moment(newMeeting.start).format('YYYY-MM-DD HH:mm:ss'),
-          fecha_fin: moment(newMeeting.end).format('YYYY-MM-DD HH:mm:ss')
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-      } else {
-        resultado = await axios.post('https://backendkurogestor.onrender.com/api/meeting', {
-          nombre: newMeeting.title,
-          descripcion: newMeeting.descripcion,
-          fecha_inicio: moment(newMeeting.start).format('YYYY-MM-DD HH:mm:ss'),
-          fecha_fin: moment(newMeeting.end).format('YYYY-MM-DD HH:mm:ss')
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-      }
-      if (resultado.data.resultado === 'Reunión actualizada exitosamente' || resultado.data.resultado === 'Reunión creada exitosamente') {
-        fetchReuniones();
-        closeModal();
-        setMessage(resultado.data.resultado);
-      } else {
-        setMessage('Error: ' + resultado.data.resultado);
-      }
-    } catch (error) {
-      console.error('Error creating/editing meeting:', error);
-      setMessage('Error al crear/editar la reunión');
-      if (error.response) {
-        setMessage('Error: ' + error.response.data.message); // Mostrar mensaje de error específico del backend
-      }
+const handleCreateOrEdit = async (e) => {
+  e.preventDefault();
+  try {
+    let resultado;
+    const token = Cookies.get('token');
+    if (isEdit) {
+      resultado = await axios.put(`https://backendkurogestor.onrender.com/api/meeting/${newMeeting.id}`, {
+        nombre: newMeeting.title,
+        descripcion: newMeeting.descripcion,
+        fecha_inicio: moment(newMeeting.start).format('YYYY-MM-DD HH:mm:ss'),
+        fecha_fin: moment(newMeeting.end).format('YYYY-MM-DD HH:mm:ss')
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    } else {
+      resultado = await axios.post('https://backendkurogestor.onrender.com/api/meeting', {
+        nombre: newMeeting.title,
+        descripcion: newMeeting.descripcion,
+        fecha_inicio: moment(newMeeting.start).format('YYYY-MM-DD HH:mm:ss'),
+        fecha_fin: moment(newMeeting.end).format('YYYY-MM-DD HH:mm:ss')
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
     }
-  };
-
+    if (resultado.data.resultado === 'Reunión actualizada exitosamente' || resultado.data.resultado === 'Reunión creada exitosamente') {
+      fetchReuniones();
+      closeModal();
+      setMessage(resultado.data.resultado);
+      window.location.reload(); // Recarga la página
+    } else {
+      setMessage('Error: ' + resultado.data.resultado);
+    }
+  } catch (error) {
+    console.error('Error creating/editing meeting:', error);
+    setMessage('Error al crear/editar la reunión');
+    if (error.response) {
+      setMessage('Error: ' + error.response.data.message); // Mostrar mensaje de error específico del backend
+    }
+  }
+};
+  
   const handleDelete = async () => {
     if (!selectedMeeting || !selectedMeeting.id) {
       console.error('selectedMeeting is null or has no ID');
