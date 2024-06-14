@@ -88,19 +88,26 @@
   background-color: #666666;
   color: #d4af37;
 }
-
+.input-date {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #d4af37;
+  background-color: #444;
+  color: #d4af37;
+  margin-top: 5px;
+}
 /* Estilos para los modales */
 .confirmation-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999; /* Z-index alto para estar por encima de otros elementos */
 }
 
 .confirmation-card {
@@ -167,36 +174,33 @@
   max-width: 90%;
 }
 
-.modal-calendario h2 {
-  margin-bottom: 20px;
-}
-
 .modal-calendario form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .modal-calendario label {
   margin-bottom: 10px;
+  text-align: left;
 }
 
-.modal-calendario input {
+.modal-calendario input,
+.modal-calendario button {
+  width: 100%;
   padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #d4af37;
+  margin-top: 5px;
+  box-sizing: border-box;
   background-color: #444;
   color: #d4af37;
-  margin-top: 5px;
+  border: 1px solid #d4af37;
 }
 
 .modal-calendario button {
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  background-color: #d4af37;
-  color: #333;
-  cursor: pointer;
   margin-top: 10px;
+  cursor: pointer;
 }
 
 .modal-calendario button:hover {
