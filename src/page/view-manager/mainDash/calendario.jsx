@@ -139,29 +139,30 @@ const handleCreateOrEdit = async (e) => {
   }
 };
   
-  const handleDelete = async () => {
-    if (!selectedMeeting || !selectedMeeting.id) {
-      console.error('selectedMeeting is null or has no ID');
-      return;
-    }
+const handleDelete = async () => {
+  if (!selectedMeeting || !selectedMeeting.id) {
+    console.error('selectedMeeting is null or has no ID');
+    return;
+  }
 
-    const { id } = selectedMeeting;
-    const token = Cookies.get('token');
+  const { id } = selectedMeeting;
+  const token = Cookies.get('token');
 
-    try {
-      await axios.delete(`https://backendkurogestor.onrender.com/api/meeting/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      setMessage('Reunión eliminada exitosamente');
-      fetchReuniones();
-      closeModal();
-    } catch (error) {
-      console.error('Error deleting meeting:', error);
-      setMessage('Error al eliminar la reunión');
-    }
-  };
+  try {
+    await axios.delete(`https://backendkurogestor.onrender.com/api/meeting/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    setMessage('Reunión eliminada exitosamente');
+    fetchReuniones();
+    setIsConfirmationOpen(false); // Cerrar modal de confirmación
+    closeModal(); // Cerrar modal de edición/creación
+  } catch (error) {
+    console.error('Error deleting meeting:', error);
+    setMessage('Error al eliminar la reunión');
+  }
+};
 
   const handleSelectEvent = (event) => {
     setSelectedMeeting(event);
@@ -204,7 +205,7 @@ const handleCreateOrEdit = async (e) => {
       backgroundColor: isTask ? '#f0ad4e' : '#5bc0de',
       color: '#fff',
       borderRadius: '5px',
-      padding: '5px',
+      paddingLeft: '5px',
       cursor: 'pointer',
       display: 'flex',
       justifyContent: 'space-between'
@@ -219,9 +220,7 @@ const handleCreateOrEdit = async (e) => {
     return (
       <div style={eventStyle}>
         <div>{eventTitle}</div>
-        {event.type === 'meeting' && (
-          <button onClick={handleEditClick} style={{ backgroundColor: '#d4af37', border: 'none', borderRadius: '3px', color: '#333', cursor: 'pointer', padding: '3px 8px' }}>Editar</button>
-        )}
+        {event.type === 'meeting'}
       </div>
     );
   };
@@ -261,7 +260,7 @@ const handleCreateOrEdit = async (e) => {
           onSelectEvent={handleSelectEvent}
           onSelectSlot={handleCreateMeeting}
           defaultView="month"
-          style={{ height: '55vh' }}
+          style={{ height: '67vh' }}
           date={updatedDate}
           components={{
             event: EventComponent
