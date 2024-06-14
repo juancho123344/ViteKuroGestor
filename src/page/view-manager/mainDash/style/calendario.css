@@ -88,6 +88,8 @@
   background-color: #666666;
   color: #d4af37;
 }
+
+/* Estilos para los modales */
 .confirmation-overlay {
   position: fixed;
   top: 0;
@@ -131,6 +133,7 @@
 .cancel-button {
   margin-left: 10px;
 }
+
 .date-input {
   padding: 5px;
   border-radius: 5px;
@@ -147,4 +150,56 @@
   background-color: #d4af37;
   color: #333;
   cursor: pointer;
+}
+
+/* Estilos para los modals */
+.modal-calendario {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #1c1c1c;
+  color: #d4af37;
+  padding: 20px;
+  border-radius: 5px;
+  z-index: 9999;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-calendario h2 {
+  margin-bottom: 20px;
+}
+
+.modal-calendario form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-calendario label {
+  margin-bottom: 10px;
+}
+
+.modal-calendario input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #d4af37;
+  background-color: #444;
+  color: #d4af37;
+  margin-top: 5px;
+}
+
+.modal-calendario button {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #d4af37;
+  color: #333;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.modal-calendario button:hover {
+  background-color: #333;
+  color: #d4af37;
 }
