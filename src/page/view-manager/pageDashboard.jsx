@@ -147,12 +147,12 @@ function DashBoard() {
             <div className="config-menu">
               <button className="go-out-menu-button" onClick={handleLogout}>Cerrar sesión</button>
               <button className="delete-menu-button" onClick={() => setShowConfirmDelete(true)}>Eliminar cuenta</button>
-              <button className="delete-menu-button" >
-            <a href="https://documentacion-gestor-darkkay007s-projects.vercel.app/" className="text-white">Documentacion</a>
-              </button  >
               <button className="toggle-theme-button" onClick={toggleTheme}>
                 {theme === "dark-mode" ? 'Modo Claro' : 'Modo Oscuro'}
               </button>
+              <button className="delete-menu-button" >
+                <a href="https://documentacion-gestor-darkkay007s-projects.vercel.app/" className="text-white">Documentacion</a>
+              </button  >
             </div>
           )}
         </div>
