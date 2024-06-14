@@ -250,11 +250,8 @@ const handleCreateOrEdit = async (e) => {
     <div className="container-calendario">
       <div className="calendar-container-calendario">
         {message && <div className="message-calendario">{message}</div>}
-        <div className="calendar-title-calendario">
-          <h2>Calendario</h2>
-        </div>
-        <input type="date" value={selectedDate.toISOString().substring(0, 10)} onChange={handleDateChange} />
-        <button onClick={updateCalendar}>Actualizar Calendario</button>
+        <input className="input-date" type="date" value={selectedDate.toISOString().substring(0, 10)} onChange={handleDateChange} />
+        <button className="update-button" onClick={updateCalendar}>Actualizar Calendario</button>
         <Calendar
           localizer={localizer}
           events={[...tareas, ...reuniones]}
@@ -264,11 +261,12 @@ const handleCreateOrEdit = async (e) => {
           onSelectEvent={handleSelectEvent}
           onSelectSlot={handleCreateMeeting}
           defaultView="month"
-          style={{ height: '70vh' }}
+          style={{ height: '55vh' }}
           date={updatedDate}
           components={{
             event: EventComponent
           }}
+          className="rbc-calendar" // Aplica el estilo al calendario
         />
       </div>
 
@@ -285,6 +283,7 @@ const handleCreateOrEdit = async (e) => {
           <label>
             Nombre:
             <input
+              className="input-nombre"
               type="text"
               value={newMeeting.title}
               onChange={(e) => setNewMeeting({ ...newMeeting, title: e.target.value })}
@@ -293,6 +292,7 @@ const handleCreateOrEdit = async (e) => {
           <label>
             Descripción:
             <input
+              className="input-descripcion"
               type="text"
               value={newMeeting.descripcion}
               onChange={(e) => setNewMeeting({ ...newMeeting, descripcion: e.target.value })}
@@ -301,6 +301,7 @@ const handleCreateOrEdit = async (e) => {
           <label>
             Fecha Inicio:
             <input
+              className="input-fecha-inicio"
               type="datetime-local"
               value={moment(newMeeting.start).format('YYYY-MM-DDTHH:mm')}
               onChange={(e) => setNewMeeting({ ...newMeeting, start: new Date(e.target.value) })}
@@ -309,6 +310,7 @@ const handleCreateOrEdit = async (e) => {
           <label>
             Fecha Fin:
             <input
+              className="input-fecha-fin"
               type="datetime-local"
               value={moment(newMeeting.end).format('YYYY-MM-DDTHH:mm')}
               onChange={(e) => setNewMeeting({ ...newMeeting, end: new Date(e.target.value) })}
@@ -327,7 +329,7 @@ const handleCreateOrEdit = async (e) => {
         onRequestClose={() => setIsConfirmationOpen(false)}
         contentLabel="Confirmar Eliminación"
         className="modal-calendario"
-        overlayClassName="overlay-calendario"
+        overlayClassName="overlay-calendario confirmation-overlay" // Aplica el estilo al overlay
         ariaHideApp={false}
       >
         <h2>¿Estás seguro de que deseas eliminar esta reunión?</h2>
