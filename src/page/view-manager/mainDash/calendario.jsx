@@ -21,8 +21,8 @@ const Calendario = () => {
     id: null,
     title: '',
     descripcion: '',
-    start: '',
-    end: ''
+    start: null,
+    end: null
   });
   const [isEdit, setIsEdit] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -94,61 +94,57 @@ const Calendario = () => {
     setModalIsOpen(true);
   };
 
-const handleCreateOrEdit = async (e) => {
-  e.preventDefault();
-  try {
-    let resultado;
-    const token = Cookies.get('token');
-    if (isEdit) {
-      resultado = await axios.put(`https://backendkurogestor.onrender.com/api/meeting/${newMeeting.id}`, {
-        nombre: newMeeting.title,
-        descripcion: newMeeting.descripcion,
-        fecha_inicio: moment(newMeeting.start).format('YYYY-MM-DD HH:mm:ss'),
-        fecha_fin: moment(newMeeting.end).format('YYYY-MM-DD HH:mm:ss')
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-    } else {
-      resultado = await axios.post('https://backendkurogestor.onrender.com/api/meeting', {
-        nombre: newMeeting.title,
-        descripcion: newMeeting.descripcion,
-        fecha_inicio: moment(newMeeting.start).format('YYYY-MM-DD HH:mm:ss'),
-        fecha_fin: moment(newMeeting.end).format('YYYY-MM-DD HH:mm:ss')
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-    }
-    if (resultado.data.resultado === 'Reunión actualizada exitosamente' || resultado.data.resultado === 'Reunión creada exitosamente') {
-      fetchReuniones();
-      closeModal();
-      setMessage(resultado.data.resultado);
-    } else {
-      setMessage('Error: ' + resultado.data.resultado);
-    }
-  } catch (error) {
-    console.error('Error creating/editing meeting:', error);
-    if (error.response) {
-      console.error('Error response data:', error.response.data);
-      console.error('Error response status:', error.response.status);
-      console.error('Error response headers:', error.response.headers);
-      setMessage('Error: ' + error.response.data.message); // Mostrar mensaje de error específico del backend
-    } else {
+  const handleCreateOrEdit = async (e) => {
+    e.preventDefault();
+    try {
+      let resultado;
+      const token = Cookies.get('token');
+      if (isEdit) {
+        resultado = await axios.put(`https://backendkurogestor.onrender.com/api/meeting/${newMeeting.id}`, {
+          nombre: newMeeting.title,
+          descripcion: newMeeting.descripcion,
+          fecha_inicio: moment(newMeeting.start).format('YYYY-MM-DD HH:mm:ss'),
+          fecha_fin: moment(newMeeting.end).format('YYYY-MM-DD HH:mm:ss')
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+      } else {
+        resultado = await axios.post('https://backendkurogestor.onrender.com/api/meeting', {
+          nombre: newMeeting.title,
+          descripcion: newMeeting.descripcion,
+          fecha_inicio: moment(newMeeting.start).format('YYYY-MM-DD HH:mm:ss'),
+          fecha_fin: moment(newMeeting.end).format('YYYY-MM-DD HH:mm:ss')
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+      }
+      if (resultado.data.resultado === 'Reunión actualizada exitosamente' || resultado.data.resultado === 'Reunión creada exitosamente') {
+        fetchReuniones();
+        closeModal();
+        setMessage(resultado.data.resultado);
+      } else {
+        setMessage('Error: ' + resultado.data.resultado);
+      }
+    } catch (error) {
+      console.error('Error creating/editing meeting:', error);
       setMessage('Error al crear/editar la reunión');
+      if (error.response) {
+        setMessage('Error: ' + error.response.data.message); // Mostrar mensaje de error específico del backend
+      }
     }
-  }
-};
-  
+  };
+
   const handleDelete = async () => {
     if (!selectedMeeting || !selectedMeeting.id) {
       console.error('selectedMeeting is null or has no ID');
       return;
     }
 
-    const { id, title } = selectedMeeting;
+    const { id } = selectedMeeting;
     const token = Cookies.get('token');
 
     try {
@@ -186,13 +182,6 @@ const handleCreateOrEdit = async (e) => {
     setModalIsOpen(true);
   };
 
-  const openConfirmation = (message, callback) => {
-    setConfirmationMessage(message);
-    setConfirmationCallback(callback);
-    setIsConfirmationOpen(true);
-    setModalIsOpen(false);
-  };
-
   const closeModal = () => {
     setModalIsOpen(false);
     setSelectedMeeting(null);
@@ -200,19 +189,10 @@ const handleCreateOrEdit = async (e) => {
       id: null,
       title: '',
       descripcion: '',
-      start: '',
-      end: ''
+      start: null,
+      end: null
     });
-    setIsEdit(false); // Reset edit mode
-  };
-
-  const handleCancelDelete = () => {
-    setIsConfirmationOpen(false);
-  };
-
-  const handleConfirmDelete = () => {
-    if (confirmationCallback) confirmationCallback();
-    setIsConfirmationOpen(false);
+    setIsEdit(false);
   };
 
   const EventComponent = ({ event }) => {
@@ -254,134 +234,107 @@ const handleCreateOrEdit = async (e) => {
 
   const isValidDate = (dateString) => {
     const regEx = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateString.match(regEx)) return false;
-    const d = new Date(dateString);
-    if (Number.isNaN(d.getTime())) return false;
-    return d.toISOString().slice(0, 10) === dateString;
+    if (!dateString.match(regEx)) return false; // Invalid format
+    const date = new Date(dateString);
+    const timestamp = date.getTime();
+    if (typeof timestamp !== 'number' || Number.isNaN(timestamp)) return false; // NaN value, Invalid date
+    return date.toISOString().startsWith(dateString);
   };
 
-  const handleUpdateCalendar = () => {
-    if (selectedDate && selectedDate !== '0') {
-      const newDate = new Date(selectedDate);
-      newDate.setDate(newDate.getDate() + 1);
-      setUpdatedDate(newDate);
-    }
-  };
-
-  const handleSelectSlot = (slotInfo) => {
-    handleCreateMeeting(slotInfo);
+  const updateCalendar = () => {
+    setUpdatedDate(selectedDate);
   };
 
   return (
-    <div className="calendar-container">
-      <div className="calendar-header">
-        <h2>Calendario</h2>
-        <div className="date-input">
-          <label>Fecha:</label>
-          <input
-            type="date"
-            value={selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : ''}
-            onChange={handleDateChange}
-          />
-          <button onClick={handleUpdateCalendar}>Actualizar Calendario</button>
+    <div className="container-calendario">
+      <div className="calendar-container-calendario">
+        {message && <div className="message-calendario">{message}</div>}
+        <div className="calendar-title-calendario">
+          <h2>Calendario</h2>
         </div>
-      </div>
-      <div className="calendar-content">
+        <input type="date" value={selectedDate.toISOString().substring(0, 10)} onChange={handleDateChange} />
+        <button onClick={updateCalendar}>Actualizar Calendario</button>
         <Calendar
           localizer={localizer}
           events={[...tareas, ...reuniones]}
           startAccessor="start"
           endAccessor="end"
           selectable
-          style={{ height: 500, margin: '50px' }}
-          onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}
-          components={{ event: EventComponent }}
+          onSelectSlot={handleCreateMeeting}
           defaultView="month"
+          style={{ height: '70vh' }}
           date={updatedDate}
+          components={{
+            event: EventComponent
+          }}
         />
       </div>
 
-      {modalIsOpen && (
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          contentLabel="Crear/Editar Reunión"
-          className="modal"
-          overlayClassName="modal-overlay"
-        >
-          <h2>{isEdit ? 'Editar Reunión' : 'Crear Reunión'}</h2>
-          <form onSubmit={handleCreateOrEdit}>
-            <label htmlFor="title">Nombre:</label>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel={isEdit ? 'Editar Reunión' : 'Crear Reunión'}
+        className="modal-calendario"
+        overlayClassName="overlay-calendario"
+        ariaHideApp={false}
+      >
+        <h2>{isEdit ? 'Editar Reunión' : 'Crear Reunión'}</h2>
+        <form onSubmit={handleCreateOrEdit}>
+          <label>
+            Nombre:
             <input
               type="text"
-              id="title"
               value={newMeeting.title}
               onChange={(e) => setNewMeeting({ ...newMeeting, title: e.target.value })}
-              required
             />
-            <label htmlFor="descripcion">Descripción:</label>
-            <textarea
-              id="descripcion"
+          </label>
+          <label>
+            Descripción:
+            <input
+              type="text"
               value={newMeeting.descripcion}
               onChange={(e) => setNewMeeting({ ...newMeeting, descripcion: e.target.value })}
-              required
-            ></textarea>
-            <label htmlFor="start">Fecha de Inicio:</label>
+            />
+          </label>
+          <label>
+            Fecha Inicio:
             <input
               type="datetime-local"
-              id="start"
               value={moment(newMeeting.start).format('YYYY-MM-DDTHH:mm')}
-              onChange={(e) => setNewMeeting({ ...newMeeting, start: e.target.value })}
-              required
+              onChange={(e) => setNewMeeting({ ...newMeeting, start: new Date(e.target.value) })}
             />
-            <label htmlFor="end">Fecha de Fin:</label>
+          </label>
+          <label>
+            Fecha Fin:
             <input
               type="datetime-local"
-              id="end"
               value={moment(newMeeting.end).format('YYYY-MM-DDTHH:mm')}
-              onChange={(e) => setNewMeeting({ ...newMeeting, end: e.target.value })}
-              required
+              onChange={(e) => setNewMeeting({ ...newMeeting, end: new Date(e.target.value) })}
             />
-            <div className="modal-buttons">
-              <button type="submit">{isEdit ? 'Guardar Cambios' : 'Crear Reunión'}</button>
-              <button type="button" onClick={closeModal}>Cancelar</button>
-              {isEdit && (
-                <button
-                  type="button"
-                  onClick={() => openConfirmation('¿Estás seguro de eliminar esta reunión?', handleDelete)}
-                  className="delete-button"
-                >
-                  Eliminar
-                </button>
-              )}
-            </div>
-          </form>
-        </Modal>
-      )}
-
-      {isConfirmationOpen && (
-        <Modal
-          isOpen={isConfirmationOpen}
-          onRequestClose={handleCancelDelete}
-          contentLabel="Confirmación"
-          className="confirmation-modal"
-          overlayClassName="modal-overlay"
-        >
-          <h2>Confirmación</h2>
-          <p>{confirmationMessage}</p>
-          <div className="modal-buttons">
-            <button onClick={handleConfirmDelete}>Sí</button>
-            <button onClick={handleCancelDelete}>No</button>
+          </label>
+          <div className="button-group-calendario">
+            <button type="submit">{isEdit ? 'Guardar Cambios' : 'Crear Reunión'}</button>
+            {isEdit && <button type="button" onClick={() => setIsConfirmationOpen(true)}>Eliminar</button>}
+            <button type="button" onClick={closeModal}>Cancelar</button>
           </div>
-        </Modal>
-      )}
+        </form>
+      </Modal>
 
-      {message && (
-        <div className="message">
-          <p>{message}</p>
+      <Modal
+        isOpen={isConfirmationOpen}
+        onRequestClose={() => setIsConfirmationOpen(false)}
+        contentLabel="Confirmar Eliminación"
+        className="modal-calendario"
+        overlayClassName="overlay-calendario"
+        ariaHideApp={false}
+      >
+        <h2>¿Estás seguro de que deseas eliminar esta reunión?</h2>
+        <div className="button-group-calendario">
+          <button onClick={handleDelete}>Sí, eliminar</button>
+          <button onClick={() => setIsConfirmationOpen(false)}>Cancelar</button>
         </div>
-      )}
+      </Modal>
     </div>
   );
 };
