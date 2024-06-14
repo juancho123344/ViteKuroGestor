@@ -59,6 +59,11 @@ const ShowTasks = () => {
   const buscarTarea = async () => {
     try {
       const token = Cookies.get('token');
+      if (busqueda.trim() === '') {
+        mostrarTareas();
+        return;
+      }
+  
       const response = await axios.get(`https://backendkurogestor.onrender.com/api/task/${busqueda}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -75,7 +80,7 @@ const ShowTasks = () => {
       setError('Error al buscar tarea');
     }
   };
-
+  
   const handleDelete = (nombre) => {
     setTareaAEliminar(nombre);
     setConfirmacionVisible(true);
